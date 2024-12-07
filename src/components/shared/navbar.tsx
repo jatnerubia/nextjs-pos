@@ -1,13 +1,14 @@
 import { ModeToggle } from "@/components/shared/mode-toggle"
 import { Button } from "@/components/ui/button"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
 
 export const Navbar = () => {
   return (
-    <header className='absolute w-full'>
-      <nav className='container mx-auto h-14 flex justify-between items-center px-4'>
-        <span className='font-bold'>Nextjs Starter</span>
+    <header>
+      <nav className='h-16 flex justify-between items-center'>
+        <SidebarTrigger />
         <div className='flex items-center gap-1'>
           <Button asChild variant='ghost' size='icon' aria-label='github link'>
             <Link href='https://github.com/jatnerubia/nextjs-starter'>

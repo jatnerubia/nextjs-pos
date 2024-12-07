@@ -2,9 +2,11 @@ import type { Metadata } from "next"
 
 import "./globals.css"
 
+import { AppSidebar } from "@/components/shared/app-sidebar"
 import { Navbar } from "@/components/shared/navbar"
 import { ReactQueryClientProvider } from "@/components/shared/react-query-client-provider"
 import { ThemeProvider } from "@/components/shared/theme-provider"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import localFont from "next/font/local"
 
@@ -39,8 +41,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          <ReactQueryClientProvider>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <main>
+                  <Navbar />
+                  {children}
+                </main>
+              </SidebarInset>
+            </SidebarProvider>
+          </ReactQueryClientProvider>
           <Toaster />
         </ThemeProvider>
       </body>
