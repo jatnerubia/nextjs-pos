@@ -1,52 +1,26 @@
 "use client"
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { DashboardIcon } from "@radix-ui/react-icons"
-
-const items = [
-  {
-    title: "Dashboard",
-    url: "#",
-    icon: DashboardIcon,
-  },
-  {
-    title: "POS",
-    url: "#",
-    icon: DashboardIcon,
-  },
-]
+import { Cart } from "@/components/shared/cart"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup } from "@/components/ui/sidebar"
+import { useOrderStore } from "@/stores/use-order.store"
 
 export function AppSidebar() {
+  const orders = useOrderStore((state) => state.orders)
+  const total = orders.reduce((prev, order) => prev + order.product.price * order.quantity, 0)
+
   return (
     <Sidebar variant='floating' collapsible='icon'>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <Cart />
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <div className='flex justify-between items-center'>
+          <span>TOTAL</span>
+          <span>{total}</span>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   )
 }
