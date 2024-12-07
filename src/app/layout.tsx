@@ -45,7 +45,7 @@ export default function RootLayout({
             <SidebarProvider>
               <AppSidebar />
               <SidebarInset>
-                <main>
+                <main className='px-2'>
                   <Navbar />
                   {children}
                 </main>
