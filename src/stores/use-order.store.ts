@@ -4,6 +4,7 @@ import { create } from "zustand"
 interface OrderStore {
   orders: Order[]
   addOrder: (order: Order) => void
+  updateOrder: (order: Order) => void
   increaseOrder: (order: Order) => void
   decreaseOrder: (order: Order) => void
   clearOrder: () => void
@@ -20,6 +21,22 @@ export const useOrderStore = create<OrderStore>()((set) => ({
       if (orderIndex !== -1) {
         const updatedOrders = [...state.orders]
         updatedOrders[orderIndex].quantity += order.quantity
+        return { orders: updatedOrders }
+      }
+
+      return {
+        orders: [...state.orders, order],
+      }
+    }),
+  updateOrder: (order: Order) =>
+    set((state) => {
+      const orderIndex = state.orders.findIndex(
+        (existingOrder) => existingOrder.product.id === order.product.id
+      )
+
+      if (orderIndex !== -1) {
+        const updatedOrders = [...state.orders]
+        updatedOrders[orderIndex] = order
         return { orders: updatedOrders }
       }
 
