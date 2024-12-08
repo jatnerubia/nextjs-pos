@@ -1,17 +1,49 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useOrderStore } from "@/stores/use-order.store"
-import { MinusIcon, PlusIcon } from "@radix-ui/react-icons"
+import { MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
 
 export function Cart() {
   const orders = useOrderStore((state) => state.orders)
   const updateOrder = useOrderStore((state) => state.updateOrder)
   const increaseOrder = useOrderStore((state) => state.increaseOrder)
   const decreaseOrder = useOrderStore((state) => state.decreaseOrder)
+  const clearOrder = useOrderStore((state) => state.clearOrder)
 
   return (
     <div className='flex flex-col gap-2'>
+      <div className='flex justify-between items-center'>
+        <h2 className='text-xl font-bold'>Cart</h2>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant='destructive' size='icon'>
+              <TrashIcon />
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Clear cart?</AlertDialogTitle>
+              <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={clearOrder}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
       {orders.map((order, i) => (
         <Card key={i}>
           <CardHeader>

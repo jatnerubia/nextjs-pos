@@ -1,7 +1,6 @@
 "use client"
 
 import { Cart } from "@/components/shared/cart"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup } from "@/components/ui/sidebar"
@@ -10,7 +9,6 @@ import { useState } from "react"
 
 export function AppSidebar() {
   const orders = useOrderStore((state) => state.orders)
-  const clearOrder = useOrderStore((state) => state.clearOrder)
   const total = orders.reduce(
     (prev, order) => prev + order.product.price * Number(order.quantity),
     0
@@ -46,9 +44,6 @@ export function AppSidebar() {
           <span>CHANGE</span>
           <span>{change}</span>
         </div>
-        <Button variant='destructive' onClick={clearOrder}>
-          Clear
-        </Button>
       </SidebarFooter>
     </Sidebar>
   )
