@@ -20,7 +20,9 @@ export const useOrderStore = create<OrderStore>()((set) => ({
 
       if (orderIndex !== -1) {
         const updatedOrders = [...state.orders]
-        updatedOrders[orderIndex].quantity += order.quantity
+        const currentOrder = updatedOrders[orderIndex]
+        const newQuantity = Number(currentOrder.quantity) + Number(order.quantity)
+        currentOrder.quantity = newQuantity.toString()
         return { orders: updatedOrders }
       }
 
@@ -52,8 +54,9 @@ export const useOrderStore = create<OrderStore>()((set) => ({
 
       if (orderIndex !== -1) {
         const updatedOrders = [...state.orders]
-        updatedOrders[orderIndex].quantity += 1
-
+        const currentOrder = updatedOrders[orderIndex]
+        const newQuantity = Number(currentOrder.quantity) + 1
+        currentOrder.quantity = newQuantity.toString()
         return { orders: updatedOrders }
       }
 
@@ -67,12 +70,12 @@ export const useOrderStore = create<OrderStore>()((set) => ({
 
       if (orderIndex !== -1) {
         const updatedOrders = [...state.orders]
-        updatedOrders[orderIndex].quantity -= 1
-
-        if (updatedOrders[orderIndex].quantity === 0) {
+        const currentOrder = updatedOrders[orderIndex]
+        const newQuantity = Number(currentOrder.quantity) - 1
+        currentOrder.quantity = newQuantity.toString()
+        if (newQuantity === 0) {
           updatedOrders.splice(orderIndex, 1)
         }
-
         return { orders: updatedOrders }
       }
 

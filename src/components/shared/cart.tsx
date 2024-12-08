@@ -17,7 +17,7 @@ export function Cart() {
           <CardHeader>
             <CardTitle className='flex justify-between items-center'>
               <span>{order.product.name}</span>
-              <span>P {order.product.price * order.quantity}</span>
+              <span>P {order.product.price * Number(order.quantity)}</span>
             </CardTitle>
           </CardHeader>
           <CardFooter>
@@ -32,17 +32,12 @@ export function Cart() {
               </Button>
               <Input
                 className='w-full text-center rounded-l-none rounded-r-none focus-visible:ring-0'
+                type='number'
                 value={order.quantity}
                 onChange={(e) => {
-                  let quantity = Number(e.target.value)
-
-                  if (isNaN(quantity)) {
-                    quantity = 0
-                  }
-
                   updateOrder({
                     ...order,
-                    quantity,
+                    quantity: e.target.value,
                   })
                 }}
               />

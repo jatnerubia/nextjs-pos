@@ -11,11 +11,13 @@ import { useState } from "react"
 export function AppSidebar() {
   const orders = useOrderStore((state) => state.orders)
   const clearOrder = useOrderStore((state) => state.clearOrder)
-  const total = orders.reduce((prev, order) => prev + order.product.price * order.quantity, 0)
+  const total = orders.reduce(
+    (prev, order) => prev + order.product.price * Number(order.quantity),
+    0
+  )
 
   const [amountPaid, setAmountPaid] = useState<string>("")
-  const convertedAmountPaid = Number(amountPaid)
-  const amountPaidInNumber = isNaN(convertedAmountPaid) ? 0 : convertedAmountPaid
+  const amountPaidInNumber = Number(amountPaid)
   const change = amountPaidInNumber - total
 
   return (
