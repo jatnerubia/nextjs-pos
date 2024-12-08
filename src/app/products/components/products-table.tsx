@@ -1,5 +1,6 @@
 "use client"
 
+import { Product } from "@/common/types/product.type"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,13 +22,42 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { deleteProduct, getProducts } from "@/db"
+import { toast } from "@/hooks/use-toast"
 import { TrashIcon } from "@radix-ui/react-icons"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 export const ProductsTable = () => {
+  const queryClient = useQueryClient()
+
   const { data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
+  })
+
+  const mutation = useMutation({
+    mutationFn: deleteProduct,
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["products"] })
+      const previousProducts = queryClient.getQueryData(["products"])
+      queryClient.setQueryData(["products"], (old: Product[]) =>
+        old.filter((product) => product.id !== id)
+      )
+      return { previousProducts }
+    },
+    onError: (error, variables, context) => {
+      toast({
+        title: "Unable to delete product",
+      })
+      queryClient.setQueryData(["products"], context?.previousProducts)
+    },
+    onSuccess: () => {
+      toast({
+        title: `Product deleted`,
+      })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] })
+    },
   })
 
   return (
@@ -58,7 +88,7 @@ export const ProductsTable = () => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={async () => deleteProduct(product.id)}>
+                    <AlertDialogAction onClick={async () => mutation.mutate(product.id)}>
                       Continue
                     </AlertDialogAction>
                   </AlertDialogFooter>
