@@ -41,7 +41,7 @@ export default function Products() {
   }
 
   return (
-    <div>
+    <div className='flex flex-col gap-4'>
       <div className='flex justify-end'>
         <AlertDialog>
           <AlertDialogTrigger asChild>

@@ -25,7 +25,7 @@ const items = [
   },
   {
     title: "POS",
-    url: "/",
+    url: "/pos",
     icon: DashboardIcon,
   },
   {
