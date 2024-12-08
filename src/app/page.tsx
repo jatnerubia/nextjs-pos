@@ -12,7 +12,7 @@ export default function Home() {
   const handleAdd = (product: Product) => {
     addOrder({
       product,
-      quantity: 1,
+      quantity: "1",
     })
   }
 

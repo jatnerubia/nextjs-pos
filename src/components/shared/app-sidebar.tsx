@@ -20,12 +20,17 @@ import Link from "next/link"
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/",
     icon: DashboardIcon,
   },
   {
     title: "POS",
-    url: "#",
+    url: "/",
+    icon: DashboardIcon,
+  },
+  {
+    title: "Products",
+    url: "/products",
     icon: DashboardIcon,
   },
 ]
