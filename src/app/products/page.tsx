@@ -24,11 +24,15 @@ import {
 } from "@/components/ui/table"
 import { addProduct, deleteProduct, getProducts } from "@/db"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
-const products = await getProducts()
-
 export default function Products() {
+  const { data } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  })
+
   const [name, setName] = useState<string>("")
   const [price, setPrice] = useState<string>("")
 
@@ -75,7 +79,7 @@ export default function Products() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product) => (
+          {data?.map((product) => (
             <TableRow key={product.id}>
               <TableCell>{product.name}</TableCell>
               <TableCell>P{product.price}</TableCell>
