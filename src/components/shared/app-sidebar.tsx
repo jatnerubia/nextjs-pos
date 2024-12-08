@@ -1,48 +1,69 @@
 "use client"
 
-import { Cart } from "@/components/shared/cart"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup } from "@/components/ui/sidebar"
-import { useOrderStore } from "@/stores/use-order.store"
-import { useState } from "react"
+import { ModeToggle } from "@/components/shared/mode-toggle"
+import { Button } from "@/components/ui/button"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar"
+import { DashboardIcon, GitHubLogoIcon } from "@radix-ui/react-icons"
+import Link from "next/link"
+
+const items = [
+  {
+    title: "Dashboard",
+    url: "#",
+    icon: DashboardIcon,
+  },
+  {
+    title: "POS",
+    url: "#",
+    icon: DashboardIcon,
+  },
+]
 
 export function AppSidebar() {
-  const orders = useOrderStore((state) => state.orders)
-  const total = orders.reduce(
-    (prev, order) => prev + order.product.price * Number(order.quantity),
-    0
-  )
-
-  const [amountPaid, setAmountPaid] = useState<string>("")
-  const amountPaidInNumber = Number(amountPaid)
-  const change = amountPaidInNumber - total
+  const { open } = useSidebar()
 
   return (
     <Sidebar variant='floating' collapsible='icon'>
       <SidebarContent>
         <SidebarGroup>
-          <Cart />
+          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className='flex justify-between items-center'>
-          <span>TOTAL</span>
-          <span>{total}</span>
-        </div>
-        <div className='grid w-full max-w-sm items-center gap-1.5'>
-          <Label htmlFor='amount_paid'>Amount Paid</Label>
-          <Input
-            id='amount_paid'
-            type='number'
-            placeholder='0'
-            value={amountPaid}
-            onChange={(e) => setAmountPaid(e.target.value)}
-          />
-        </div>
-        <div className='flex justify-between items-center'>
-          <span>CHANGE</span>
-          <span>{change}</span>
+        <div className='p-1'>
+          <div className={`flex ${open ? "flex-row" : "flex-col"} items-center gap-1`}>
+            <Button asChild variant='ghost' size='icon' aria-label='github link'>
+              <Link href='#'>
+                <GitHubLogoIcon className='w-5 h-5' />
+              </Link>
+            </Button>
+            <ModeToggle />
+          </div>
         </div>
       </SidebarFooter>
     </Sidebar>
