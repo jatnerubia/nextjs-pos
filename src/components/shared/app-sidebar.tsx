@@ -63,7 +63,7 @@ export function AppSidebar() {
         <div className='p-1'>
           <div className={`flex ${open ? "flex-row" : "flex-col"} items-center gap-1`}>
             <Button asChild variant='ghost' size='icon' aria-label='github link'>
-              <Link href='#'>
+              <Link href='https://github.com/jatnerubia/nextjs-pos'>
                 <GitHubLogoIcon className='w-5 h-5' />
               </Link>
             </Button>
