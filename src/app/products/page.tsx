@@ -1,5 +1,6 @@
 "use client"
 
+import { Product } from "@/common/types/product.type"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,21 +24,48 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { addProduct, deleteProduct, getProducts } from "@/db"
+import { toast } from "@/hooks/use-toast"
 import { TrashIcon } from "@radix-ui/react-icons"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 
 export default function Products() {
+  const queryClient = useQueryClient()
+
   const { data } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
+  })
+
+  const mutation = useMutation({
+    mutationFn: addProduct,
+    onMutate: async (newProduct) => {
+      await queryClient.cancelQueries({ queryKey: ["products"] })
+      const previousProducts = queryClient.getQueryData(["products"])
+      queryClient.setQueryData(["products"], (old: Product[]) => [...old, newProduct])
+      return { previousProducts }
+    },
+    onError: (error, variables, context) => {
+      toast({
+        title: "Unable to add product",
+      })
+      queryClient.setQueryData(["products"], context?.previousProducts)
+    },
+    onSuccess: (error, variables) => {
+      toast({
+        title: `Added ${variables.name}`,
+      })
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] })
+    },
   })
 
   const [name, setName] = useState<string>("")
   const [price, setPrice] = useState<string>("")
 
   const handleAdd = () => {
-    addProduct({
+    mutation.mutate({
       id: Date.now(),
       name,
       price: Number(price),
@@ -74,7 +102,7 @@ export default function Products() {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
-            <TableHead>Amount</TableHead>
+            <TableHead>Price</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
