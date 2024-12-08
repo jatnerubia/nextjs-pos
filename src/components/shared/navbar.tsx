@@ -1,3 +1,4 @@
+import { Cart } from "@/components/shared/cart"
 import { ModeToggle } from "@/components/shared/mode-toggle"
 import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
@@ -17,6 +18,7 @@ export const Navbar = () => {
           </Button>
           <ModeToggle />
         </div>
+        <Cart />
       </nav>
     </header>
   )
