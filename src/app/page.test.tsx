@@ -5,6 +5,6 @@ import { describe, expect, it } from "vitest"
 describe("Page", () => {
   it("should render correctly", () => {
     render(<Page />)
-    expect(screen.getByText("Hey")).toBeDefined()
+    expect(screen.getByText("Dashboard")).toBeDefined()
   })
 })
