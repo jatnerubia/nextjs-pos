@@ -24,7 +24,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { useOrderStore } from "@/stores/use-order.store"
-import { MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
+import { BackpackIcon, MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
 import { useState } from "react"
 
 export function Cart() {
@@ -46,7 +46,9 @@ export function Cart() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant='outline'>Open</Button>
+        <Button variant='outline' size='icon'>
+          <BackpackIcon />
+        </Button>
       </SheetTrigger>
       <SheetContent className='flex flex-col'>
         <SheetHeader>
