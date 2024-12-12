@@ -61,7 +61,7 @@ export default function Pos() {
         </Card>
       ))}
       <Dialog open={selectedProduct !== null} onOpenChange={handleOnOpenChange}>
-        <DialogContent className='sm:max-w-[425px]'>
+        <DialogContent className='sm:max-w-[425px]' onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Enter Quantity for {selectedProduct?.name}</DialogTitle>
           </DialogHeader>
