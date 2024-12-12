@@ -8,6 +8,13 @@
       "when": 1733917715183,
       "tag": "0000_awesome_red_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1733989302762,
+      "tag": "0001_fantastic_champions",
+      "breakpoints": true
     }
   ]
 }
