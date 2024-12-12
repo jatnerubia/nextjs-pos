@@ -26,7 +26,7 @@ export default function Pos() {
       {data?.items.map((product, i) => (
         <Card
           key={i}
-          className='cursor-pointer active:bg-accent'
+          className='cursor-pointer select-none active:bg-accent'
           onClick={() => handleAdd(product)}
         >
           <CardHeader>
