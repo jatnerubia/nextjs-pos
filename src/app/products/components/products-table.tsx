@@ -1,6 +1,7 @@
 "use client"
 
-import { Product } from "@/common/types/product.type"
+import { PRODUCTS } from "@/common/constants/app.constant"
+import { PaginatedResponse } from "@/common/types/pagination.type"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,8 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { deleteProduct, getProducts } from "@/db"
+import { Product } from "@/db/schemas"
 import { toast } from "@/hooks/use-toast"
+import { deleteProduct, getProducts } from "@/lib/api"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -30,25 +32,26 @@ export const ProductsTable = () => {
   const queryClient = useQueryClient()
 
   const { data } = useQuery({
-    queryKey: ["products"],
+    queryKey: [PRODUCTS],
     queryFn: getProducts,
   })
 
   const mutation = useMutation({
     mutationFn: deleteProduct,
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: ["products"] })
-      const previousProducts = queryClient.getQueryData(["products"])
-      queryClient.setQueryData(["products"], (old: Product[]) =>
-        old.filter((product) => product.id !== id)
-      )
-      return { previousProducts }
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: [PRODUCTS] })
+      const previousPaginatedProducts = queryClient.getQueryData([PRODUCTS])
+      queryClient.setQueryData([PRODUCTS], (old: PaginatedResponse<Product>) => ({
+        ...old,
+        items: old.items.filter((product) => product.id !== id),
+      }))
+      return { previousPaginatedProducts }
     },
     onError: (error, variables, context) => {
       toast({
         title: "Unable to delete product",
       })
-      queryClient.setQueryData(["products"], context?.previousProducts)
+      queryClient.setQueryData([PRODUCTS], context?.previousPaginatedProducts)
     },
     onSuccess: () => {
       toast({
@@ -56,7 +59,7 @@ export const ProductsTable = () => {
       })
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS] })
     },
   })
 
@@ -70,7 +73,7 @@ export const ProductsTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((product) => (
+        {data?.items.map((product) => (
           <TableRow key={product.id}>
             <TableCell>{product.name}</TableCell>
             <TableCell>P{product.price}</TableCell>

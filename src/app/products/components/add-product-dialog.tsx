@@ -1,6 +1,7 @@
 "use client"
 
-import { Product } from "@/common/types/product.type"
+import { PRODUCTS } from "@/common/constants/app.constant"
+import { PaginatedResponse } from "@/common/types/pagination.type"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,13 +13,15 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { addProduct } from "@/db"
+import { Product } from "@/db/schemas"
 import { toast } from "@/hooks/use-toast"
+import { createProduct } from "@/lib/api"
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { zodValidator } from "@tanstack/zod-form-adapter"
 import { useState } from "react"
 import { LuLoader } from "react-icons/lu"
+import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
 
 export const AddProductDialog = () => {
@@ -27,18 +30,21 @@ export const AddProductDialog = () => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: addProduct,
+    mutationFn: createProduct,
     onMutate: async (newProduct) => {
-      await queryClient.cancelQueries({ queryKey: ["products"] })
-      const previousProducts = queryClient.getQueryData(["products"])
-      queryClient.setQueryData(["products"], (old: Product[]) => [...old, newProduct])
-      return { previousProducts }
+      await queryClient.cancelQueries({ queryKey: [PRODUCTS] })
+      const previousPaginatedProducts = queryClient.getQueryData([PRODUCTS])
+      queryClient.setQueryData([PRODUCTS], (old: PaginatedResponse<Product>) => ({
+        ...old,
+        items: [...old.items, newProduct],
+      }))
+      return { previousPaginatedProducts }
     },
     onError: (error, variables, context) => {
       toast({
         title: "Unable to add product",
       })
-      queryClient.setQueryData(["products"], context?.previousProducts)
+      queryClient.setQueryData([PRODUCTS], context?.previousPaginatedProducts)
     },
     onSuccess: (error, variables) => {
       toast({
@@ -46,7 +52,7 @@ export const AddProductDialog = () => {
       })
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] })
+      queryClient.invalidateQueries({ queryKey: [PRODUCTS] })
       setShowCreateDialog(false)
     },
   })
@@ -59,9 +65,9 @@ export const AddProductDialog = () => {
     onSubmit: async ({ value }) => {
       form.reset()
       mutation.mutate({
-        id: Date.now(),
+        id: uuidv4(),
         name: value.name,
-        price: Number(value.price),
+        price: value.price,
       })
     },
     validatorAdapter: zodValidator(),

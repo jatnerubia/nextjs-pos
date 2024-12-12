@@ -1,8 +1,10 @@
+import { PRODUCTS } from "@/common/constants/app.constant"
+import { InferSelectModel } from "drizzle-orm"
 import { numeric, pgTable, text, uuid } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
 
-export const products = pgTable("products", {
+export const products = pgTable(PRODUCTS, {
   id: uuid().primaryKey().defaultRandom(),
   name: text().notNull(),
   price: numeric({ precision: 9, scale: 2 }).notNull(),
@@ -18,3 +20,5 @@ export const insertProductsSchema = createInsertSchema(products, {
 })
 
 export const patchProductsSchema = insertProductsSchema.partial()
+
+export type Product = InferSelectModel<typeof products>
