@@ -18,7 +18,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
       )
     }
     return Response.json({
-      message: "Delete successfully",
+      message: "Product successfully deleted",
     })
   } catch (error) {
     if (error instanceof ZodError) {
