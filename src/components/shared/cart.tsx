@@ -35,7 +35,7 @@ export function Cart() {
   const clearOrder = useOrderStore((state) => state.clearOrder)
 
   const total = orders.reduce(
-    (prev, order) => prev + order.product.price * Number(order.quantity),
+    (prev, order) => prev + Number(order.product.price) * Number(order.quantity),
     0
   )
 
@@ -79,7 +79,7 @@ export function Cart() {
               <CardHeader>
                 <CardTitle className='flex justify-between items-center'>
                   <span>{order.product.name}</span>
-                  <span>P {order.product.price * Number(order.quantity)}</span>
+                  <span>P {Number(order.product.price) * Number(order.quantity)}</span>
                 </CardTitle>
               </CardHeader>
               <CardFooter>
