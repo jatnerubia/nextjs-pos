@@ -1,4 +1,4 @@
-import { Product } from "@/common/types/product.type"
+import { Product } from "@/db/schemas"
 
 export interface Order {
   product: Product
