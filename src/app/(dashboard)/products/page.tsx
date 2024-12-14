@@ -1,5 +1,5 @@
-import { AddProductDialog } from "@/app/products/components/add-product-dialog"
-import { ProductsTable } from "@/app/products/components/products-table"
+import { AddProductDialog } from "@/app/(dashboard)/products/components/add-product-dialog"
+import { ProductsTable } from "@/app/(dashboard)/products/components/products-table"
 
 export default function Products() {
   return (

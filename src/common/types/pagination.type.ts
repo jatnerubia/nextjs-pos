@@ -2,6 +2,7 @@ export type PaginatedResponse<T> = {
   items: T[]
   metadata: PaginationMetadata
 }
+
 export type PaginationMetadata = {
   current_page: number
   previous_page: number | null
