@@ -1,5 +1,5 @@
-import { DELETE } from "@/app/api/products/[id]/route"
-import { POST } from "@/app/api/products/route"
+import { DELETE } from "@/app/(server)/api/products/[id]/route"
+import { POST } from "@/app/(server)/api/products/route"
 import { describe, expect, it } from "vitest"
 
 describe("Products API", () => {

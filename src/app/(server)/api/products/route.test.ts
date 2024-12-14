@@ -1,4 +1,4 @@
-import { GET, POST } from "@/app/api/products/route"
+import { GET, POST } from "@/app/(server)/api/products/route"
 import { describe, expect, it } from "vitest"
 
 describe("Products API", () => {
