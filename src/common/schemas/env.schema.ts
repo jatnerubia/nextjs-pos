@@ -11,4 +11,7 @@ export const envSchema = z.object({
   SESSION_SECRET: z.string().regex(base64Regex, {
     message: "Invalid base64 string (length must be 44 characters)",
   }),
+  ADMIN_NAME: z.string().min(1, { message: "Must be at least 1 character." }),
+  ADMIN_EMAIL: z.string().min(1, { message: "Must be at least 1 character." }),
+  ADMIN_PASSWORD: z.string().min(8, { message: "Must be at least 8 characters." }),
 })

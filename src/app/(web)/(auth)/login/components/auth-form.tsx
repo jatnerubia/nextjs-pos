@@ -77,7 +77,7 @@ export const AuthForm = () => {
       <form.Field
         name='password'
         validators={{
-          onChange: z.string().min(8, { message: "Must be at least 8 character" }),
+          onChange: z.string().min(8, { message: "Must be at least 8 characters" }),
         }}
       >
         {(field) => (

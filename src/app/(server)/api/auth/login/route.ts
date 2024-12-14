@@ -2,6 +2,7 @@ import { loginSchema } from "@/common/schemas/auth.schema"
 import db from "@/db"
 import { users } from "@/db/schemas"
 import { createSession } from "@/lib/session"
+import bcrypt from "bcrypt"
 import { eq } from "drizzle-orm"
 import { ZodError } from "zod"
 
@@ -14,9 +15,11 @@ export async function POST(req: Request) {
       password,
     })
 
-    const user = await db.query.users.findFirst({ where: eq(users.email, parsedData.email) })
+    const existingUser = await db.query.users.findFirst({
+      where: eq(users.email, parsedData.email),
+    })
 
-    if (user === undefined) {
+    if (!existingUser) {
       return Response.json(
         { message: "Invalid credentials" },
         {
@@ -25,7 +28,27 @@ export async function POST(req: Request) {
       )
     }
 
-    await createSession(user.id)
+    if (!existingUser.password) {
+      return Response.json(
+        { message: "Invalid credentials" },
+        {
+          status: 400,
+        }
+      )
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, existingUser.password)
+
+    if (!isPasswordMatch) {
+      return Response.json(
+        { message: "Invalid credentials" },
+        {
+          status: 400,
+        }
+      )
+    }
+
+    await createSession(existingUser.id)
 
     return Response.json(
       { message: "Login success" },
