@@ -1,6 +1,7 @@
 "use client"
 
 import { ModeToggle } from "@/components/shared/mode-toggle"
+import { NavUser } from "@/components/shared/nav-footer"
 import { Button } from "@/components/ui/button"
 import {
   Sidebar,
@@ -70,6 +71,13 @@ export function AppSidebar() {
             <ModeToggle />
           </div>
         </div>
+        <NavUser
+          user={{
+            name: "JL",
+            email: "jason@gmail.com",
+            avatar: "",
+          }}
+        />
       </SidebarFooter>
     </Sidebar>
   )
