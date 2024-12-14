@@ -1,5 +1,6 @@
 import db from "@/db"
 import { insertProductsSchema, products } from "@/db/schemas/products.schema"
+import { verifySession } from "@/lib/dal"
 import { NextRequest } from "next/server"
 import { ZodError } from "zod"
 
@@ -7,6 +8,12 @@ const PAGE_SIZE = 20
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await verifySession()
+
+    if (!session) {
+      return new Response(null, { status: 401 })
+    }
+
     const searchParams = req.nextUrl.searchParams
     const parsedPage = Number(searchParams.get("page") ?? 1)
     const page = isNaN(parsedPage) ? 1 : parsedPage
@@ -51,6 +58,12 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: Request) {
   try {
+    const session = await verifySession()
+
+    if (!session) {
+      return new Response(null, { status: 401 })
+    }
+
     const { name, price } = await req.json()
 
     const parsedData = insertProductsSchema.parse({

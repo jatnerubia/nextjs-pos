@@ -1,10 +1,17 @@
 import db from "@/db"
 import { products } from "@/db/schemas"
+import { verifySession } from "@/lib/dal"
 import { eq } from "drizzle-orm"
 import { ZodError } from "zod"
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const session = await verifySession()
+
+    if (!session) {
+      return new Response(null, { status: 401 })
+    }
+
     const id = (await params).id
     const result = await db.delete(products).where(eq(products.id, id))
     if (result.rowCount === 0) {
