@@ -1,8 +1,18 @@
 import { DELETE } from "@/app/(server)/api/products/[id]/route"
 import { POST } from "@/app/(server)/api/products/route"
-import { describe, expect, it } from "vitest"
+import { verifySession } from "@/lib/dal"
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest"
+
+vi.mock("@/lib/dal", () => ({
+  verifySession: vi.fn(),
+}))
 
 describe("Products API", () => {
+  beforeEach(() => {
+    const mockedVerifySession = verifySession as Mock
+    mockedVerifySession.mockResolvedValue({ isAuth: true, userId: "1" })
+  })
+
   describe("Delete", () => {
     it("should return 200 and a success message", async () => {
       const requestObject = {
